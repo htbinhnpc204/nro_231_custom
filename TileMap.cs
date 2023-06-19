@@ -791,17 +791,12 @@ public class TileMap
 		}
 	}
 
-    internal static bool isMapHome()
+    internal static bool IsMapHome()
     {
         return mapID == 21 + Char.myCharz().cgender;
     }
 
-    internal static bool isBDKBMap()
-	{
-		return mapID == 135;
-	}
-
-	internal static bool isValidMap()
+	internal static bool IsValidMap()
 	{
 		return !invalidChangeZoneMap.Contains(mapID);
     }

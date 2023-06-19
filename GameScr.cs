@@ -3856,8 +3856,7 @@ public class GameScr : mScreen, IChatable
                 if (tmp != null)
                     if (tmp.template.id == 0 || tmp.template.id == 2 || tmp.template.id == 12 || tmp.template.id == 17 || tmp.template.id == 4 /*|| tmp.template.id == 13*/)
                     {
-                        int num = 0;
-                        num = ((tmp.template.manaUseType == 2) ? 1 : ((tmp.template.manaUseType == 1) ? (tmp.manaUse * Char.myCharz().cMPFull / 100) : tmp.manaUse));
+                        int num = ((tmp.template.manaUseType == 2) ? 1 : ((tmp.template.manaUseType == 1) ? (tmp.manaUse * Char.myCharz().cMPFull / 100) : tmp.manaUse));
                         if (Char.myCharz().cMP >= num && !tmp.isCooldown())
                         {
                             if (skill == null)
@@ -3875,10 +3874,9 @@ public class GameScr : mScreen, IChatable
             {
                 if (Char.myCharz().myskill != skill)
                     doSelectSkill(skill, true);
-                Code.MoveTo(@char.mobFocus.xFirst, @char.mobFocus.yFirst);
                 Code.MoveTo(@char.mobFocus.xFirst, @char.mobFocus.yFirst - 1);
                 Code.AttackMob(@char.mobFocus);
-                bool f = TileMap.tileTypeAt(Char.myCharz().cx, Char.myCharz().cy, 2);
+                _ = TileMap.tileTypeAt(Char.myCharz().cx, Char.myCharz().cy, 2);
                 Char.myCharz().setSkillPaint(sks[@char.myskill.skillId], 1);
             }
 
@@ -3965,35 +3963,14 @@ public class GameScr : mScreen, IChatable
         {
             return;
         }
-        if (Char.myCharz().cx < Char.myCharz().itemFocus.x)
+        if (Char.myCharz().itemFocus.template.id != 673)
         {
-            Char.myCharz().cdir = 1;
+            Code.MoveTo(Char.myCharz().itemFocus.x, Char.myCharz().itemFocus.y);
+            Service.gI().pickItem(Char.myCharz().itemFocus.itemMapID);
         }
         else
         {
-            Char.myCharz().cdir = -1;
-        }
-        int num = Math.abs(Char.myCharz().cx - Char.myCharz().itemFocus.x);
-        int num2 = Math.abs(Char.myCharz().cy - Char.myCharz().itemFocus.y);
-        if (num <= 40 && num2 < 40)
-        {
-            GameCanvas.clearKeyHold();
-            GameCanvas.clearKeyPressed();
-            if (Char.myCharz().itemFocus.template.id != 673)
-            {
-                Service.gI().pickItem(Char.myCharz().itemFocus.itemMapID);
-            }
-            else
-            {
-                askToPick();
-            }
-        }
-        else
-        {
-            Char.myCharz().currentMovePoint = new MovePoint(Char.myCharz().itemFocus.x, Char.myCharz().itemFocus.y);
-            Char.myCharz().endMovePointCommand = new Command(null, null, 8002, null);
-            GameCanvas.clearKeyHold();
-            GameCanvas.clearKeyPressed();
+            askToPick();
         }
     }
 
@@ -4524,12 +4501,8 @@ public class GameScr : mScreen, IChatable
             {
                 for(int i = vItemMap.a.Count - 1; i >=0 ; i--)
                 {
-                    ItemMap item;
-                    if ((item = (ItemMap)vItemMap.a[i]) != null && Code.IsMyItem(item) && Code.CanPickItem(item))
-                    {
-                        Code.DoPickItem(item);
-                        break;
-                    }
+                    Code.DoPickItem((ItemMap)vItemMap.a[i]);
+                    break;
                 }
             }
             catch
@@ -4545,24 +4518,18 @@ public class GameScr : mScreen, IChatable
                 if (focus != null)
                 {
                     mychar.charFocus = focus;
-                    int distance = Res.distance(mychar.cx, mychar.cy, focus.cx, focus.cy);
-                    if (distance > mychar.myskill.dx || distance > mychar.myskill.dy)
+                    int objDis = Res.distance(mychar.cx, mychar.cy, focus.cx, focus.cy);
+                    int oldDis = Res.distance(mychar.cx, mychar.cy, Code.oldPos[0], Code.oldPos[1]);
+                    if (objDis > mychar.myskill.dx || oldDis > mychar.myskill.dx)
                         Code.MoveTo(focus.cx, focus.cy);
                 }
-            }
-        }
-        if (Code.isKhoaViTri && GameCanvas.gameTick % 20 == 0)
-        {
-            if (Char.myCharz().cx != Code.oldPos[0] || Char.myCharz().cy != Code.oldPos[1])
-            {
-                Code.MoveTo(Code.oldPos[0], Code.oldPos[1]);
             }
         }
         if (GameCanvas.gameTick % (10 * Time.timeScale) == 0 && !GameCanvas.isLoading && !Char.isLoadingMap && !ServerListScreen.isWait)
         {
             if (Char.myCharz().havePet)
                 Service.gI().petInfo();
-            if (TileMap.isValidMap())
+            if (TileMap.IsValidMap())
                 Service.gI().openUIZone();
         }
         if (!Char.myCharz().isDie 
@@ -4648,10 +4615,7 @@ public class GameScr : mScreen, IChatable
             if (Char.myCharz().statusMe == 1)
             {
             }
-            if (popUpYesNo != null)
-            {
-                popUpYesNo.update();
-            }
+            popUpYesNo?.update();
             EffecMn.update();
             GameCanvas.debug("E5x", 0);
             for (int i = 0; i < vMob.size(); i++)
@@ -5293,7 +5257,7 @@ public class GameScr : mScreen, IChatable
             }
             string st = $"Map: {TileMap.mapName}[{TileMap.mapID}]{(flag ? $"-Khu: {TileMap.zoneID}" : string.Empty)}";
             mFont.tahoma_7_yellow.drawString(g, st, 30, 80, 0, mFont.tahoma_7_grey);
-            if (TileMap.isValidMap() && numPlayer != null && maxPlayer != null)
+            if (TileMap.IsValidMap() && numPlayer != null && maxPlayer != null)
             {
                 Code.PrintMinMaxZone(g);
             }

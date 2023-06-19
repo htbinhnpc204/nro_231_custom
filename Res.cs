@@ -258,9 +258,8 @@ public class Res
 
 	public static int s2tick(int currentTimeMillis)
 	{
-		int num = 0;
-		num = currentTimeMillis * 16 / 1000;
-		if (currentTimeMillis * 16 % 1000 >= 5)
+        int num = currentTimeMillis * 16 / 1000;
+        if (currentTimeMillis * 16 % 1000 >= 5)
 		{
 			num++;
 		}

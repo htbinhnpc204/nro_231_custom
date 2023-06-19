@@ -472,15 +472,28 @@ public class Code
         mFont.tahoma_7_yellow.drawString(g, String.Format("Khu đông nhất: {0}[{1}/{2}]", idmax, GameScr.gI().numPlayer[idmax], GameScr.gI().maxPlayer[idmin]), 30, 100, 0, mFont.tahoma_7_grey);
     }
 
+    internal static Item GetCskb()
+    {
+        var itemBag = Char.myCharz().arrItemBag;
+        for(int i = itemBag.Length - 1; i >= 0; i++)
+        {
+            if (itemBag[0].template.id == 380)
+            {
+                return itemBag[0];
+            }
+        }
+        return null;
+    }
+
     internal static void openCSKB()
     {
         Item cskb = Char.myCharz().arrItemBag.FirstOrDefault(x => x.template.id == 380);
-        if (cskb != null && cskb.quantity >= 90)
+        if (cskb != null)
         {
             new Thread(() =>
             {
                 isUsing = true;
-                while ((cskb = Char.myCharz().arrItemBag.FirstOrDefault(x => x.template.id == 380)) != null && cskb.quantity > 0)
+                while ((cskb = GetCskb()) != null && cskb.quantity > 0)
                 {
                     Service.gI().useItem(0, 1, (sbyte)cskb.indexUI, -1);
                 }
@@ -527,6 +540,7 @@ public class Code
 
     public static void DoPickItem(ItemMap itemMap)
     {
+        if (!CanPickItem(itemMap) || !IsMyItem(itemMap)) { return; }
         int cx = Char.myCharz().cx, cy = Char.myCharz().cy;
         MoveTo(itemMap.getX(), itemMap.getY());
         Service.gI().pickItem(itemMap.itemMapID);
