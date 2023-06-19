@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "w7Qp+HNSRsQtEcV96IqcJRaY+rrV/nq8VrQ6kCx2LnEduaV1lj4zPnFfUZD3gzxtaKBLHE8Fh3BqoWlXsJDbcA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\LAPTOP_46\\OneDrive\\Desktop\\Dragonboy_vn_v231_Data\\Code\\Assembly-CSharp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\LAPTOP_46\\.nuget\\packages\\litjson\\0.18.0\\litjson.0.18.0.nupkg.sha512"
+  ],
+  "logs": []
+}

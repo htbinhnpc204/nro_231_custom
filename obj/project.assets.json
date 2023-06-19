@@ -1,0 +1,96 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v3.5": {
+      "LitJson/0.18.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/LitJSON.dll": {}
+        },
+        "runtime": {
+          "lib/net35/LitJSON.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LitJson/0.18.0": {
+      "sha512": "zVK/1iUURxvEZH1eiviFpS8Qbh1fZe926ie18vhHuisVYcNbdVjgG85X8BsGt7WBU5Ka3gZvaQXRX6EsoD2hrw==",
+      "type": "package",
+      "path": "litjson/0.18.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net20/LitJSON.dll",
+        "lib/net35/LitJSON.dll",
+        "lib/net40/LitJSON.dll",
+        "lib/net45/LitJSON.dll",
+        "lib/net6.0/LitJSON.dll",
+        "lib/netstandard1.5/LitJSON.dll",
+        "lib/netstandard2.0/LitJSON.dll",
+        "lib/netstandard2.1/LitJSON.dll",
+        "litjson.0.18.0.nupkg.sha512",
+        "litjson.nuspec",
+        "litjson.png"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v3.5": [
+      "LitJson >= 0.18.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\LAPTOP_46\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\LAPTOP_46\\OneDrive\\Desktop\\Dragonboy_vn_v231_Data\\Code\\Assembly-CSharp.csproj",
+      "projectName": "Assembly-CSharp",
+      "projectPath": "C:\\Users\\LAPTOP_46\\OneDrive\\Desktop\\Dragonboy_vn_v231_Data\\Code\\Assembly-CSharp.csproj",
+      "packagesPath": "C:\\Users\\LAPTOP_46\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\LAPTOP_46\\OneDrive\\Desktop\\Dragonboy_vn_v231_Data\\Code\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\LAPTOP_46\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net35"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net35": {
+          "targetAlias": "net35",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net35": {
+        "targetAlias": "net35",
+        "dependencies": {
+          "LitJson": {
+            "target": "Package",
+            "version": "[0.18.0, )"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
