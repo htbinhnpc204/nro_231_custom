@@ -3518,23 +3518,28 @@ public class GameScr : mScreen, IChatable
 
     private void doDoubleClickToObj(IMapObject obj)
     {
-        if ((obj.Equals(Char.myCharz().npcFocus) || mobCapcha == null) && !checkClickToBotton(obj))
-        {
-            checkEffToObj(obj);
-            Char.myCharz().cancelAttack();
-            Char.myCharz().currentMovePoint = null;
-            Char.myCharz().cvx = (Char.myCharz().cvy = 0);
-            obj.stopMoving();
-            auto = 10;
-            doFire(isFireByShortCut: false, skipWaypoint: true);
-            clickToX = obj.getX();
-            clickToY = obj.getY();
-            clickOnTileTop = false;
-            clickMoving = true;
-            clickMovingRed = true;
-            clickMovingTimeOut = 20;
-            clickMovingP1 = 30;
-        }
+        //if ((obj.Equals(Char.myCharz().npcFocus) || mobCapcha == null) && !checkClickToBotton(obj))
+        //{
+        //    checkEffToObj(obj);
+        //    Char.myCharz().cancelAttack();
+        //    Char.myCharz().currentMovePoint = null;
+        //    Char.myCharz().cvx = (Char.myCharz().cvy = 0);
+        //    obj.stopMoving();
+        //    auto = 10;
+        //    doFire(isFireByShortCut: false, skipWaypoint: true);
+        //    clickToX = obj.getX();
+        //    clickToY = obj.getY();
+        //    clickOnTileTop = false;
+        //    clickMoving = true;
+        //    clickMovingRed = true;
+        //    clickMovingTimeOut = 20;
+        //    clickMovingP1 = 30;
+        //}
+
+        Char.myCharz().cx = obj.getX();
+        Char.myCharz().cy = obj.getY();
+
+        Code.MoveTo(obj.getX(), obj.getY());
     }
 
     private void checkSingleClick()
@@ -3790,14 +3795,17 @@ public class GameScr : mScreen, IChatable
 
     private void autoPlay()
     {
+        // tan sat
         if (timeSkill > 0)
         {
             timeSkill--;
         }
+
         if (!canAutoPlay || Char.myCharz().statusMe == 14 || Char.myCharz().statusMe == 5 || Char.myCharz().isCharge || Char.myCharz().isFlyAndCharge || Char.myCharz().isUseChargeSkill())
         {
             return;
         }
+
         bool flag = false;
         for (int i = 0; i < vMob.size(); i++)
         {
@@ -3805,81 +3813,79 @@ public class GameScr : mScreen, IChatable
             if (mob.status != 0 && mob.status != 1)
             {
                 flag = true;
-            }
-        }
-        if (!flag)
-        {
-            return;
-        }
-        for (int j = 0; j < Char.myCharz().arrItemBag.Length; j++)
-        {
-            Item item = Char.myCharz().arrItemBag[j];
-            if (item != null && item.template.type == 6)
-            {
                 break;
             }
         }
 
-        if (Char.myCharz().cHP <= Char.myCharz().cHPFull * 20 / 100 || Char.myCharz().cMP <= Char.myCharz().cMPFull * 20 / 100)
+        if (!flag)
+        {
+            return;
+        }
+
+        Char myChar = Char.myCharz();
+
+        if (myChar.cHP <= myChar.cHPFull * 20 / 100 || myChar.cMP <= myChar.cMPFull * 20 / 100)
         {
             doUseHP();
         }
-        if (Char.myCharz().mobFocus == null || (Char.myCharz().mobFocus != null && Char.myCharz().mobFocus.isMobMe))
+
+        Mob mobFocus = myChar.mobFocus;
+
+        if (mobFocus == null || (mobFocus != null && mobFocus.isMobMe))
         {
             for (int num = vMob.size() - 1; num >= 0; num--)
             {
                 Mob mob2 = (Mob)vMob.elementAt(num);
-                if (mob2.status != 0 && (string.IsNullOrEmpty(Code.mobName) || mob2.getTemplate().name == Code.mobName) && mob2.status != 1 && mob2.hp > 0 && !mob2.isMobMe)
+                if (mob2.status != 0 && (Code.mobName == null || mob2.getTemplate().name.Equals(Code.mobName)) && mob2.status != 1 && mob2.hp > 0 && !mob2.isMobMe)
                 {
-                    Char.myCharz().clearFocus(1);
+                    myChar.clearFocus(1);
                     Code.MoveTo(mob2.xFirst, mob2.yFirst);
-                    Char.myCharz().mobFocus = mob2;
+                    myChar.mobFocus = mob2;
                     break;
                 }
                 else
                 {
-                    Char.myCharz().mobFocus = null;
+                    myChar.mobFocus = null;
                 }
             }
         }
-        else if (Char.myCharz().mobFocus.hp <= 0 || Char.myCharz().mobFocus.status == 1 || Char.myCharz().mobFocus.status == 0)
+        else if (mobFocus.hp <= 0 || mobFocus.status == 1 || mobFocus.status == 0)
         {
-            Char.myCharz().mobFocus = null;
+            myChar.mobFocus = null;
         }
-        if (Char.myCharz().mobFocus != null)
+
+        mobFocus = myChar.mobFocus;
+
+        if (mobFocus != null)
         {
-            Char @char = Char.myCharz();
             Skill skill = null;
+
             for (int l = 0; l < onScreenSkill.Length; l++)
             {
                 Skill tmp = onScreenSkill[l];
-                if (tmp != null)
-                    if (tmp.template.id == 0 || tmp.template.id == 2 || tmp.template.id == 12 || tmp.template.id == 17 || tmp.template.id == 4 /*|| tmp.template.id == 13*/)
+                if (tmp != null && (tmp.template.id == 0 || tmp.template.id == 2 || tmp.template.id == 12 || tmp.template.id == 17 || tmp.template.id == 4))
+                {
+                    int num = (tmp.template.manaUseType == 2) ? 1 : ((tmp.template.manaUseType == 1) ? (tmp.manaUse * myChar.cMPFull / 100) : tmp.manaUse);
+                    if (myChar.cMP >= num && !tmp.isCooldown())
                     {
-                        int num = ((tmp.template.manaUseType == 2) ? 1 : ((tmp.template.manaUseType == 1) ? (tmp.manaUse * Char.myCharz().cMPFull / 100) : tmp.manaUse));
-                        if (Char.myCharz().cMP >= num && !tmp.isCooldown())
+                        if (skill == null || skill.coolDown < tmp.coolDown)
                         {
-                            if (skill == null)
-                            {
-                                skill = tmp;
-                            }
-                            else if (skill.coolDown < tmp.coolDown)
-                            {
-                                skill = tmp;
-                            }
+                            skill = tmp;
                         }
                     }
-            }
-            if (skill != null)
-            {
-                if (Char.myCharz().myskill != skill)
-                    doSelectSkill(skill, true);
-                Code.MoveTo(@char.mobFocus.xFirst, @char.mobFocus.yFirst - 1);
-                Code.AttackMob(@char.mobFocus);
-                _ = TileMap.tileTypeAt(Char.myCharz().cx, Char.myCharz().cy, 2);
-                Char.myCharz().setSkillPaint(sks[@char.myskill.skillId], 1);
+                }
             }
 
+            if (skill != null)
+            {
+                if (myChar.myskill != skill)
+                {
+                    doSelectSkill(skill, true);
+                }
+                Code.MoveTo(myChar.mobFocus.xFirst, myChar.mobFocus.yFirst - 1);
+                Code.AttackMob(myChar.mobFocus);
+                myChar.setSkillPaint(sks[myChar.myskill.skillId], 1);
+            }
         }
     }
 
